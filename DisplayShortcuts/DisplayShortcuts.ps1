@@ -190,7 +190,7 @@ Refresh-ShortcutList
 
 # Set the default theme mode based on the current Windows theme
 Set-ThemeMode -mode $defaultMode
-$form.Tag = $defaultMode  #
+$form.Tag = $defaultMode
 
 # Show the form
 $form.ShowDialog()
