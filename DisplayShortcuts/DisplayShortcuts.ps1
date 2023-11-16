@@ -26,55 +26,30 @@ function Set-ThemeMode {
 
     # Refresh the form to apply the theme changes
     $form.Refresh()
-}
 
-# Function to toggle between light and dark modes
-function Toggle-ThemeMode {
-    if ($form.Tag -eq 'Light') {
-        Set-ThemeMode -mode 'Dark'
-        $form.Tag = 'Dark'
-    } else {
-        Set-ThemeMode -mode 'Light'
-        $form.Tag = 'Light'
-    }
-
-    # Update the form and controls color
-    Update-FormColors
-}
-
-# Function to update form and controls colors based on the theme
-function Update-FormColors {
-    if ($form.Tag -eq 'Dark') {
-        $form.BackColor = [System.Drawing.Color]::FromArgb(33, 33, 33)
+    # Apply color changes based on the selected theme mode
+    if ($mode -eq 'Dark') {
+        $form.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 48)
         $form.ForeColor = [System.Drawing.Color]::White
-
         $listView.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 48)
         $listView.ForeColor = [System.Drawing.Color]::White
-
-        $refreshButton.BackColor = [System.Drawing.Color]::FromArgb(63, 63, 63)
+        $refreshButton.BackColor = [System.Drawing.Color]::FromArgb(63, 63, 70)
         $refreshButton.ForeColor = [System.Drawing.Color]::White
-
-        $openButton.BackColor = [System.Drawing.Color]::FromArgb(63, 63, 63)
+        $openButton.BackColor = [System.Drawing.Color]::FromArgb(63, 63, 70)
         $openButton.ForeColor = [System.Drawing.Color]::White
-
-        $themeButton.BackColor = [System.Drawing.Color]::FromArgb(63, 63, 63)
+        $themeButton.BackColor = [System.Drawing.Color]::FromArgb(63, 63, 70)
         $themeButton.ForeColor = [System.Drawing.Color]::White
     } else {
-        # Light mode or default Windows theme
-        $form.BackColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
-        $form.ForeColor = [System.Drawing.Color]::Black
-
-        $listView.BackColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
-        $listView.ForeColor = [System.Drawing.Color]::Black
-
-        $refreshButton.BackColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
-        $refreshButton.ForeColor = [System.Drawing.Color]::Black
-
-        $openButton.BackColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
-        $openButton.ForeColor = [System.Drawing.Color]::Black
-
-        $themeButton.BackColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
-        $themeButton.ForeColor = [System.Drawing.Color]::Black
+        $form.BackColor = [System.Drawing.SystemColors]::Control
+        $form.ForeColor = [System.Drawing.SystemColors]::ControlText
+        $listView.BackColor = [System.Drawing.SystemColors]::Window
+        $listView.ForeColor = [System.Drawing.SystemColors]::WindowText
+        $refreshButton.BackColor = [System.Drawing.SystemColors]::Control
+        $refreshButton.ForeColor = [System.Drawing.SystemColors]::ControlText
+        $openButton.BackColor = [System.Drawing.SystemColors]::Control
+        $openButton.ForeColor = [System.Drawing.SystemColors]::ControlText
+        $themeButton.BackColor = [System.Drawing.SystemColors]::Control
+        $themeButton.ForeColor = [System.Drawing.SystemColors]::ControlText
     }
 }
 
