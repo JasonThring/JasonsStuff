@@ -15,9 +15,9 @@ function Set-ThemeMode {
 
     # Set the application-wide visual style to match the theme mode
     if ($mode -eq 'Dark') {
-        [System.Windows.Forms.Application]::EnableVisualStyles()
+        <#[System.Windows.Forms.Application]::EnableVisualStyles()
         [System.Windows.Forms.Application]::VisualStyleState = 'ClientAndNonClientAreas'
-        [System.Windows.Forms.Application]::SetHighDpiMode('PerMonitorV2')
+        [System.Windows.Forms.Application]::SetHighDpiMode('PerMonitorV2')#>
         
         # Adjust the color scheme for dark mode
         $form.BackColor = [System.Drawing.Color]::FromArgb(30, 30, 30)
@@ -31,9 +31,9 @@ function Set-ThemeMode {
         $themeButton.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 45)
         $themeButton.ForeColor = [System.Drawing.Color]::White
     } else {
-        [System.Windows.Forms.Application]::EnableVisualStyles()
+        <#[System.Windows.Forms.Application]::EnableVisualStyles()
         [System.Windows.Forms.Application]::VisualStyleState = 'ClientAndNonClientAreas'
-        [System.Windows.Forms.Application]::SetHighDpiMode('PerMonitorV2')
+        [System.Windows.Forms.Application]::SetHighDpiMode('PerMonitorV2')#>
 
         # Adjust the color scheme for light mode
         $form.BackColor = [System.Drawing.Color]::White
