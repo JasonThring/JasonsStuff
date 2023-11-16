@@ -100,6 +100,13 @@ function Open-SelectedShortcut {
     }
 }
 
+# Event handler for form size changed to auto-size ListView
+$form.Add_SizeChanged({
+    $listView.Size = New-Object System.Drawing.Size([int]$form.ClientSize.Width - 20, [int]$form.ClientSize.Height - 80)
+    $refreshButton.Location = New-Object System.Drawing.Point(10, [int]$form.ClientSize.Height - 60)
+    $openButton.Location = New-Object System.Drawing.Point([int]$form.ClientSize.Width - 110, [int]$form.ClientSize.Height - 60)
+})
+
 # Call the refresh function to populate the list on startup
 Refresh-ShortcutList
 
