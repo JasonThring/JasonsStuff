@@ -22,6 +22,7 @@ $listView.Location = New-Object System.Drawing.Point(10, 10)
 $listView.Size = New-Object System.Drawing.Size(580, 300)
 $listView.View = [System.Windows.Forms.View]::LargeIcon # Set the view to LargeIcon
 $listView.LargeImageList = $imageList
+$listView.Anchor = [System.Windows.Forms.AnchorStyles]::Top -bor [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right
 $form.Controls.Add($listView)
 
 # Button to refresh the list
@@ -29,6 +30,7 @@ $refreshButton = New-Object System.Windows.Forms.Button
 $refreshButton.Location = New-Object System.Drawing.Point(10, 330)
 $refreshButton.Size = New-Object System.Drawing.Size(100, 30)
 $refreshButton.Text = "Refresh"
+$refreshButton.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left
 $refreshButton.Add_Click({
     Refresh-ShortcutList
 })
@@ -39,6 +41,7 @@ $openButton = New-Object System.Windows.Forms.Button
 $openButton.Location = New-Object System.Drawing.Point(490, 330)
 $openButton.Size = New-Object System.Drawing.Size(100, 30)
 $openButton.Text = "Open"
+$openButton.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Right
 $openButton.Add_Click({
     Open-SelectedShortcut
 })
@@ -99,13 +102,6 @@ function Open-SelectedShortcut {
         Start-Process "$shortcutsFolder\$fileName"
     }
 }
-
-# Event handler for form size changed to auto-size ListView
-$form.Add_SizeChanged({
-    $listView.Size = New-Object System.Drawing.Size([int]$form.ClientSize.Width - 20, [int]$form.ClientSize.Height - 80)
-    $refreshButton.Location = New-Object System.Drawing.Point(10, [int]$form.ClientSize.Height - 60)
-    $openButton.Location = New-Object System.Drawing.Point([int]$form.ClientSize.Width - 110, [int]$form.ClientSize.Height - 60)
-})
 
 # Call the refresh function to populate the list on startup
 Refresh-ShortcutList
