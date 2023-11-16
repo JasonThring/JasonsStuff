@@ -18,44 +18,58 @@ function Set-ThemeMode {
         [System.Windows.Forms.Application]::EnableVisualStyles()
         [System.Windows.Forms.Application]::VisualStyleState = 'ClientAndNonClientAreas'
         [System.Windows.Forms.Application]::SetHighDpiMode('PerMonitorV2')
+        
+        # Adjust the color scheme for dark mode
+        $form.BackColor = [System.Drawing.Color]::FromArgb(30, 30, 30)
+        $form.ForeColor = [System.Drawing.Color]::White
+        $listView.BackColor = [System.Drawing.Color]::FromArgb(30, 30, 30)
+        $listView.ForeColor = [System.Drawing.Color]::White
+        $refreshButton.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 45)
+        $refreshButton.ForeColor = [System.Drawing.Color]::White
+        $openButton.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 45)
+        $openButton.ForeColor = [System.Drawing.Color]::White
+        $themeButton.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 45)
+        $themeButton.ForeColor = [System.Drawing.Color]::White
     } else {
         [System.Windows.Forms.Application]::EnableVisualStyles()
         [System.Windows.Forms.Application]::VisualStyleState = 'ClientAndNonClientAreas'
         [System.Windows.Forms.Application]::SetHighDpiMode('PerMonitorV2')
+
+        # Adjust the color scheme for light mode
+        $form.BackColor = [System.Drawing.Color]::White
+        $form.ForeColor = [System.Drawing.Color]::Black
+        $listView.BackColor = [System.Drawing.Color]::White
+        $listView.ForeColor = [System.Drawing.Color]::Black
+        $refreshButton.BackColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
+        $refreshButton.ForeColor = [System.Drawing.Color]::Black
+        $openButton.BackColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
+        $openButton.ForeColor = [System.Drawing.Color]::Black
+        $themeButton.BackColor = [System.Drawing.Color]::FromArgb(240, 240, 240)
+        $themeButton.ForeColor = [System.Drawing.Color]::Black
     }
 
     # Refresh the form to apply the theme changes
     $form.Refresh()
-
-    # Apply color changes based on the selected theme mode
-    if ($mode -eq 'Dark') {
-        $form.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 48)
-        $form.ForeColor = [System.Drawing.Color]::White
-        $listView.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 48)
-        $listView.ForeColor = [System.Drawing.Color]::White
-        $refreshButton.BackColor = [System.Drawing.Color]::FromArgb(63, 63, 70)
-        $refreshButton.ForeColor = [System.Drawing.Color]::White
-        $openButton.BackColor = [System.Drawing.Color]::FromArgb(63, 63, 70)
-        $openButton.ForeColor = [System.Drawing.Color]::White
-        $themeButton.BackColor = [System.Drawing.Color]::FromArgb(63, 63, 70)
-        $themeButton.ForeColor = [System.Drawing.Color]::White
-    } else {
-        $form.BackColor = [System.Drawing.SystemColors]::Control
-        $form.ForeColor = [System.Drawing.SystemColors]::ControlText
-        $listView.BackColor = [System.Drawing.SystemColors]::Window
-        $listView.ForeColor = [System.Drawing.SystemColors]::WindowText
-        $refreshButton.BackColor = [System.Drawing.SystemColors]::Control
-        $refreshButton.ForeColor = [System.Drawing.SystemColors]::ControlText
-        $openButton.BackColor = [System.Drawing.SystemColors]::Control
-        $openButton.ForeColor = [System.Drawing.SystemColors]::ControlText
-        $themeButton.BackColor = [System.Drawing.SystemColors]::Control
-        $themeButton.ForeColor = [System.Drawing.SystemColors]::ControlText
-    }
 }
 
-# Get the current Windows theme and set the default mode
-$windowsTheme = [System.Windows.Forms.Application]::VisualStyleState
-$defaultMode = if ($windowsTheme -eq 'ClientAndNonClientAreas') { 'Light' } else { 'Dark' }
+# Function to get the system-wide app mode from the Registry
+function Get-AppModeFromRegistry {
+    $keyPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize'
+    $valueName = 'AppsUseLightTheme'
+
+    if (Test-Path $keyPath) {
+        $value = Get-ItemProperty -Path $keyPath -Name $valueName -ErrorAction SilentlyContinue
+        if ($null -ne $value) {
+            if ($value.$valueName -eq 0) { return 'Dark' } else { return 'Light' }
+        }
+    }
+
+    # Default to 'Dark' if not found
+    return 'Dark'
+}
+
+# Get the current system-wide app mode and set the default mode
+$defaultMode = Get-AppModeFromRegistry
 
 # Create a form
 $form = New-Object System.Windows.Forms.Form
