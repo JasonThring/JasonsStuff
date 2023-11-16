@@ -6,6 +6,32 @@ Add-Type -AssemblyName System.Windows.Forms.DataVisualization
 # Script shortcuts
 $shortcutsFolder = "F:\GameShortcuts"
 
+# Function to set the theme mode
+function Set-ThemeMode {
+    param (
+        [ValidateSet('Light', 'Dark')]
+        [string]$mode
+    )
+
+    # Set the application-wide visual style to match the theme mode
+    if ($mode -eq 'Dark') {
+        [System.Windows.Forms.Application]::EnableVisualStyles()
+        [System.Windows.Forms.Application]::VisualStyleState = 'ClientAndNonClientAreas'
+        [System.Windows.Forms.Application]::SetHighDpiMode('PerMonitorV2')
+    } else {
+        [System.Windows.Forms.Application]::EnableVisualStyles()
+        [System.Windows.Forms.Application]::VisualStyleState = 'ClientAndNonClientAreas'
+        [System.Windows.Forms.Application]::SetHighDpiMode('PerMonitorV2')
+    }
+
+    # Refresh the form to apply the theme changes
+    $form.Refresh()
+}
+
+# Get the current Windows theme and set the default mode
+$windowsTheme = [System.Windows.Forms.Application]::VisualStyleState
+$defaultMode = if ($windowsTheme -eq 'ClientAndNonClientAreas') { 'Light' } else { 'Dark' }
+
 # Create a form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Shortcut Files Viewer"
@@ -46,6 +72,23 @@ $openButton.Add_Click({
     Open-SelectedShortcut
 })
 $form.Controls.Add($openButton)
+
+# Button to switch between light and dark modes
+$themeButton = New-Object System.Windows.Forms.Button
+$themeButton.Location = New-Object System.Drawing.Point(250, 330)
+$themeButton.Size = New-Object System.Drawing.Size(100, 30)
+$themeButton.Text = "Toggle Theme"
+$themeButton.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::None
+$themeButton.Add_Click({
+    if ($form.Tag -eq 'Light') {
+        Set-ThemeMode -mode 'Dark'
+        $form.Tag = 'Dark'
+    } else {
+        Set-ThemeMode -mode 'Light'
+        $form.Tag = 'Light'
+    }
+})
+$form.Controls.Add($themeButton)
 
 # Function to refresh the list of shortcut files
 function Refresh-ShortcutList {
@@ -105,6 +148,10 @@ function Open-SelectedShortcut {
 
 # Call the refresh function to populate the list on startup
 Refresh-ShortcutList
+
+# Set the default theme mode based on the current Windows theme
+Set-ThemeMode -mode $defaultMode
+$form.Tag = $defaultMode  #
 
 # Show the form
 $form.ShowDialog()
