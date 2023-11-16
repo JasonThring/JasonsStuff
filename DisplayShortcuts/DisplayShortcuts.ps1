@@ -74,7 +74,7 @@ $defaultMode = Get-AppModeFromRegistry
 # Create a form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Shortcut Files Viewer"
-$form.Size = New-Object System.Drawing.Size(600, 400)
+$form.Size = New-Object System.Drawing.Size(615, 410)
 $form.StartPosition = "CenterScreen"
 
 # Create an ImageList for file icons
