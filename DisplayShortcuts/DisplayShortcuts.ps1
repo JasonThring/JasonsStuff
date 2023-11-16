@@ -14,19 +14,15 @@ $form.StartPosition = "CenterScreen"
 
 # Create an ImageList for file icons
 $imageList = New-Object System.Windows.Forms.ImageList
-$imageList.ImageSize = New-Object System.Drawing.Size(16, 16)
+$imageList.ImageSize = New-Object System.Drawing.Size(48, 48) # Adjust the icon size
 
-# Create a ListView to display shortcut files with icons
+# Create a ListView to display shortcut files with large icons
 $listView = New-Object System.Windows.Forms.ListView
 $listView.Location = New-Object System.Drawing.Point(10, 10)
 $listView.Size = New-Object System.Drawing.Size(580, 300)
-$listView.View = [System.Windows.Forms.View]::Details
-$listView.SmallImageList = $imageList
+$listView.View = [System.Windows.Forms.View]::LargeIcon # Set the view to LargeIcon
+$listView.LargeImageList = $imageList
 $form.Controls.Add($listView)
-
-# Add columns to the ListView
-$listView.Columns.Add("Icon", 50) | Out-Null
-$listView.Columns.Add("File Name", 500) | Out-Null
 
 # Button to refresh the list
 $refreshButton = New-Object System.Windows.Forms.Button
@@ -61,7 +57,7 @@ function Refresh-ShortcutList {
         $itemName = [System.IO.Path]::GetFileNameWithoutExtension($file.FullName)
         $item = New-Object System.Windows.Forms.ListViewItem
         $item.ImageIndex = $imageList.Images.Count - 1
-        $item.SubItems.Add($itemName) # Add file name without path and extension
+        $item.Text = $itemName # Set the item text to display the name
         $listView.Items.Add($item)
     }
 }
@@ -99,8 +95,8 @@ $listView.Add_DragDrop({
 function Open-SelectedShortcut {
     if ($listView.SelectedItems.Count -eq 1) {
         $selectedItem = $listView.SelectedItems[0]
-        $fileName = $selectedItem.SubItems[1].Text  # Index 1 corresponds to the "File Name" column
-        Start-Process "$($shortcutsFolder)\$($fileName)"
+        $fileName = $selectedItem.Text
+        Start-Process "$shortcutsFolder\$fileName"
     }
 }
 
