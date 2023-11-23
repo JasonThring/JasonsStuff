@@ -1,14 +1,16 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
+# Define the grid size
+$gridSize =10
+
 # Define the form
 $form = New-Object Windows.Forms.Form
 $form.Text = "Lights Out"
-$form.Size = New-Object Drawing.Size(300, 300)
-$form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedSingle
+$form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Sizable
+$form.MinimumSize = New-Object Drawing.Size(200, 200)  # Set a minimum size to prevent it from being resized too small
 
-# Create a 5x5 grid of buttons
-$gridSize = 5
+# Create a grid of buttons
 $buttons = @()
 
 for ($i = 0; $i -lt $gridSize; $i++) {
@@ -20,6 +22,11 @@ for ($i = 0; $i -lt $gridSize; $i++) {
         $button.Add_Click({
             ToggleLights $button.Tag
         })
+
+        # Set the Anchor property to make the button resize with the form
+        <#$button.Anchor = [System.Windows.Forms.AnchorStyles]::Top -bor [System.Windows.Forms.AnchorStyles]::Bottom -bor `
+                         [System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right#>
+
         $form.Controls.Add($button)
         $buttons += $button
     }
